@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-var db = require('./db');
+var db = require('../db');
 
 // 로그인
 router.post('/login', (req, res) => {
     var id = req.body.id;
     var pw = req.body.pw;
     console.log(id);
+    console.log(pw);
     if (id && pw) {             // id와 pw가 입력되었는지 확인
         console.log(id);
         db.query('SELECT * FROM user_info WHERE user_id = ? AND pw = ?', [id, pw], (error, results, fields) => {

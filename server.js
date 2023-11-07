@@ -1,17 +1,14 @@
 // node_modules 에 있는 express 소환
 const express = require('express');
 
-const bodyParser = require('body-parser');
-
 // express 는 함수 -> 반환값 변수에 저장
 const app = express();
-const fs = require('fs');
 
 const db = require('./db.js')
-//const loginModule = require('./login.js')
-//const registerModule = require('./register.js')
-const bookapiModule = require('./bookapi.js');
-//const report = require('./bookreport.js');
+//const loginModule = require('./Modules/login.js')
+//const registerModule = require('./Modules/register.js')
+const bookapiModule = require('./Modules/bookapi.js');
+//const report = require('./Modules/bookreport.js');
 
 //모듈 연결
 //app.use(loginModule);
@@ -35,22 +32,16 @@ app.listen(3000, () => {
 //   console.log('/user 호출', +req);
 // })
 
-app.use(bodyParser.json());
-
-app.use(express.json()); // JSON 데이터를 파싱하기 위해
-
-let postData = null;
-
 //isbn 번호 받기
-app.post("/post", (req, res) => {
-  const postData = req.body.data;
-  console.log('Received data: ', postData);
-  //res.json({ message: 'Data received successfully' });
-  res.send(`ISBN received: ${postData}`);
-  //bookapiModule(req,res);
-});
+// app.post("/post", (req, res) => {
+//   const postData = req.body.data;
+//   console.log('Received data: ', postData);
+//   //res.json({ message: 'Data received successfully' });
+//   res.send(`ISBN received: ${postData}`);
+//   //bookapiModule(req,res);
+// });
 
-
+//console.log(postData)
 // app.get('/data', (req, res) => {
 //   //데이터베이스에서 데이터를 가져오는
 //   con.query('SELECT * FROM book_info', (err, res) => {
@@ -63,4 +54,8 @@ app.post("/post", (req, res) => {
 //   res.status(200).json({ data: fetchedData });
 // });
 
-module.exports = postData;
+// const postData = "9791191056556";
+
+// module.exports = {
+//   postData,
+// };

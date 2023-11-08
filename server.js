@@ -4,14 +4,17 @@ const express = require('express');
 // express 는 함수 -> 반환값 변수에 저장
 const app = express();
 
+//post용
+app.use(express.json());
+
 const db = require('./db.js')
-//const loginModule = require('./Modules/login.js')
-//const registerModule = require('./Modules/register.js')
-const bookapiModule = require('./Modules/bookapi.js');
+const loginModule = require('./login.js')
+const registerModule = require('./Modules/register.js')
+const bookapiModule = require('./bookapi.js');
 //const report = require('./Modules/bookreport.js');
 
 //모듈 연결
-//app.use(loginModule);
+app.use(loginModule);
 //app.use(registerModule);
 app.use(bookapiModule);
 
@@ -21,25 +24,23 @@ app.listen(3000, () => {
 })
 
 //서버-프론트 연결
-// app.get('/', (req,res) => {
-//     console.log("-----Front Connected!!-----")
-//     var text = "server.js 출신 데이터";
-//     res.send(text);
-// })
+app.get('/', (req,res) => {
+    console.log("-----Front Connected!!-----")
+    var text = "server.js 출신 데이터";
+    res.send(text);
+})
 
 //테스트용
-// app.post('/test', (req, res) => {
-//   console.log('/user 호출', +req);
-// })
+app.post('/test', (req, res) => {
+  console.log('/user 호출', +req);
+})
 
 //isbn 번호 받기
-// app.post("/post", (req, res) => {
-//   const postData = req.body.data;
-//   console.log('Received data: ', postData);
-//   //res.json({ message: 'Data received successfully' });
-//   res.send(`ISBN received: ${postData}`);
-//   //bookapiModule(req,res);
-// });
+//app.post("/post", (req, res) => {
+  //const data = req.body.data;
+  //console.log('Received data: ', data);
+//});
+
 
 //console.log(postData)
 // app.get('/data', (req, res) => {
@@ -53,9 +54,3 @@ app.listen(3000, () => {
 //   //가져온 데이터를 JSON 형식으로 클라이언트에 반환
 //   res.status(200).json({ data: fetchedData });
 // });
-
-// const postData = "9791191056556";
-
-// module.exports = {
-//   postData,
-// };

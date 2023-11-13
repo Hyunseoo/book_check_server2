@@ -1,63 +1,73 @@
 const axios = require('axios');
 const express = require('express');
-const app = express();
-
-const convert = require('xml-js');
-const request = require('request');
-
 const router = express.Router();
-
+const app = express();
 app.use('/api', router);
 
-//post용
-//app.use(express.json());
+var db = require('./db.js');
 
-// ASPX 페이지 URL
+// aladin api URL
 const apiUrl = 'http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx';
 
-global.text = "";
+global.title = "";
+global.author = "";
+global.description = "";
+global.price = "";
+global.cover = "";
+global.publisher = "";
 
 router.post("/post", (req, res) => {
-  const data = req.body.data;
-  console.log('Received data: ', data);
+  const isbn = req.body.isbn;
+  console.log('Received isbn: ', isbn);
 
 axios.get(apiUrl, {
     params: {
-      TTBKey: 'ttb0413lhs1704001',
-      ItemId: data,
+      TTBKey: 'key',
+      ItemId: isbn,
       ItemIdType: 'ISBN13',
-      Output: 'XML'
+      Output: 'JS',
+      Cover: 'Big',
+      //OptResult: ratingInfo
     }
   })
     .then((response) => {
-      //console.log(typeof response.data);
-      //console.log(typeof response);
+      const bookdata = response.data //response에서 data라는 JSON 형태의 String값을 받아옴
+      const json = bookdata.replace(/;/g, ''); //오류 발생시키는 ; 제거
+      const jsondata = JSON.parse(json); //Json 형태로 파싱
+      console.log(jsondata);
 
-      const datas = response.data
+      const title = jsondata.item[0].title; //item 배열의 첫번째 인덱스인 title 속성
+      const author = jsondata.item[0].author;
+      const description = jsondata.item[0].description;
+      const price = jsondata.item[0].priceStandard;
+      const cover = jsondata.item[0].cover;
+      const publisher = jsondata.item[0].publisher;
 
-      //const arr = datas.split("<");
-      //console.log(arr)
+      global.title = title;
+      global.author = author;
+      global.description = description;
+      global.price = price;
+      global.cover = cover;
+      global.publisher = publisher;
+      
+      //console.log(title);
+      //console.log(author);
+      //console.log(description);
 
-      //const str = "<title>해리포터</title>";
-
-      const startIndex1 = datas.indexOf("<item ") + "<item ".length;
-      const endIndex1 = datas.indexOf("</item>");
-      const extractedData1 = datas.slice(startIndex1, endIndex1);
-      //console.log(extractedData1);
-
-      const startIndex = extractedData1.indexOf("<title>") + "<title>".length;
-      const endIndex = extractedData1.indexOf("</title>");
-      const extractedData = extractedData1.slice(startIndex, endIndex);
-      //console.log(extractedData);
-
-      //const items = response.data.item;
-      //console.log(items);
-
-      //const resdata = JSON.parse(response.data);
-      //console.log(resdata);
-      //const text = "";
-      global.text = extractedData;
-      console.log(text);
+      //book_info DB 저장
+      db.query(
+        'INSERT INTO book_info (book_isbn, book_title, book_cover) VALUES (?, ?, ?)',
+        [isbn, title, cover],
+        (error, data) => {
+          if (error) {
+            console.error(`에러 발생: ${error.message}`);
+            res.status(500).send("책정보 저장 서버 오류");
+          } else {
+            console.log("책정보가 성공적으로 저장되었습니다.");
+            //res.send("데이터가 성공적으로 삽입되었습니다.");
+          }
+        }
+      );
 
     })
     .catch((error) => {
@@ -69,16 +79,16 @@ axios.get(apiUrl, {
 router.post("/book_info", (req, res) => {
   setTimeout(() => {
     const bookInfo = {
-      title: global.text.toString(),
-      writer: "폴 올랜드 지음, 노희준 외 옮김",
-      publisher: "한빛아카데미(교재)",
-      price: 42000,
-      summary: "파이썬을 이용하여 3D 그래픽스, 게임 설계, 시뮬레이션, 머신러닝 알고리즘에 필요한 수학을 쉽게 설명하고, 상황별 다양한 코딩을 직접 해보며 수학 개념이 작동하는 방식을 깨달을 수 있도록 구성하였다.",
-      };
+      title: global.title,
+      writer: global.author,
+      publisher: global.publisher,
+      price: global.price,
+      summary: global.description,
+      cover: global.cover,
+      rating: 10.0
+    };
       res.send(bookInfo);
-  }, 5000);
+  }, 3000);  //실행 시간 조절
 });
-
-//console.log(bookInfo);
 
 module.exports = router;

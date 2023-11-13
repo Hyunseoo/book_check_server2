@@ -9,13 +9,13 @@ app.use(express.json());
 
 const db = require('./db.js')
 const loginModule = require('./login.js')
-const registerModule = require('./Modules/register.js')
+const registerModule = require('./register.js')
 const bookapiModule = require('./bookapi.js');
 //const report = require('./Modules/bookreport.js');
 
 //모듈 연결
 app.use(loginModule);
-//app.use(registerModule);
+app.use(registerModule);
 app.use(bookapiModule);
 
 // 3000 포트로 서버 오픈
@@ -37,8 +37,8 @@ app.post('/test', (req, res) => {
 
 //isbn 번호 받기
 //app.post("/post", (req, res) => {
-  //const data = req.body.data;
-  //console.log('Received data: ', data);
+  //const isbn = req.body.isbn;
+  //console.log('Received isbn: ', isbn);
 //});
 
 

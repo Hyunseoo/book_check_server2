@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var db = require('../db');
+var db = require('./db.js');
 
 // 회원가입
 router.post('/register', (req, res) => {    
@@ -9,19 +9,22 @@ router.post('/register', (req, res) => {
     var pw = req.body.pw;
     var name = req.body.name;
     console.log(id);
+    console.log(pw);
     console.log(name);
     db.query('SELECT * FROM user_info', (err, res) => {
         if (err) {
             console.log(err);
         }
-        console.log(res);
     });
     if (id && pw && name) {
         
-        db.query('SELECT * FROM user_info WHERE user_id = ?', [id], (error, results, fields) => { // DB에 같은 아이디가 있는지 확인
+        db.query('SELECT * FROM user_info WHERE user_id = ?', 
+        [id], (error, results, fields) => { // DB에 같은 아이디가 있는지 확인
             if (error) throw error;
             if (results.length <= 0) {     // DB에 같은 아이디가 없는 경우 
-                db.query('INSERT INTO user_info (user_id, pw, name) VALUES(?,?,?)', [id, pw, name], (error, data) => {
+                db.query(
+                    'INSERT INTO user_info (user_id, pw, name) VALUES(?,?,?)', 
+                [id, pw, name], (error, data) => {
                     if (error) throw error;
                     res.send("회원가입이 완료되었습니다!");
                 });

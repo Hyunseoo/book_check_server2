@@ -7,7 +7,7 @@ app.use('/api', router);
 var db = require('./db.js');
 
 // aladin api URL
-const apiUrl = 'http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx';
+const apiUrl = 'http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx'; //?output=JS&OptResult=ratingInfo
 
 global.title = "";
 global.author = "";
@@ -22,19 +22,21 @@ router.post("/post", (req, res) => {
 
 axios.get(apiUrl, {
     params: {
-      TTBKey: 'key',
+      TTBKey: 'ttbkey',
       ItemId: isbn,
       ItemIdType: 'ISBN13',
       Output: 'JS',
+      Version: '20131101',
       Cover: 'Big',
-      //OptResult: ratingInfo
+      OptResult: 'ratingInfo'
     }
   })
     .then((response) => {
-      const bookdata = response.data //response에서 data라는 JSON 형태의 String값을 받아옴
+      console.log(response.data.item[0]);
+      const bookdata = response.data //response에서 data라는 JSON 형태의 String을 받아옴
       const json = bookdata.replace(/;/g, ''); //오류 발생시키는 ; 제거
       const jsondata = JSON.parse(json); //Json 형태로 파싱
-      console.log(jsondata);
+      //console.log(jsondata);
 
       const title = jsondata.item[0].title; //item 배열의 첫번째 인덱스인 title 속성
       const author = jsondata.item[0].author;

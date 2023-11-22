@@ -4,7 +4,7 @@ const router = express.Router();
 const app = express();
 app.use('/api', router);
 
-var db = require('./db.js');
+//var db = require('./db.js');
 
 // aladin api URL
 const apiUrl = 'http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx';
@@ -20,9 +20,9 @@ router.post("/post", (req, res) => {
   const name = req.body.name;
   console.log('Received name: ', name);
 
-axios.get(apiUrl, {
+  axios.get(apiUrl, {
     params: {
-      TTBKey: 'key',
+      TTBKey: 'ttbkey ',
       ItemId: name,
       ItemIdType: 'ItemId',
       Output: 'JS',
@@ -49,7 +49,7 @@ axios.get(apiUrl, {
       global.price = price;
       global.cover = cover;
       global.publisher = publisher;
-      
+
       //console.log(title);
       //console.log(author);
       //console.log(description);
@@ -87,7 +87,7 @@ router.post("/book_info", (req, res) => {
       cover: global.cover,
       rating: 10.0
     };
-      res.send(bookInfo);
+    res.send(bookInfo);
   }, 3000);  //실행 시간 조절
 });
 

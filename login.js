@@ -7,19 +7,12 @@ var db = require('./db.js');
 router.post('/login', (req, res) => {
     var id = req.body.id;
     var pw = req.body.pw;
-    console.log(id);
-    console.log(pw);
-    if (id && pw) {             // id와 pw가 입력되었는지 확인
-        //console.log(id);
+    console.log("로그인 :", id, pw);
+    if (id && pw) { //id와 pw가 입력되었는지 확인
         db.query('SELECT * FROM user_info WHERE user_id = ? AND pw = ?', 
         [id, pw], (error, results, fields) => {
             if (error) throw error;
-            if (results.length > 0) {       // db에서의 반환값이 있으면 로그인 성공
-                //req.session.is_logined = true;      // 세션 정보 갱신
-                //req.session.nickname = id; //name으로 바꿔야될수도??????
-                //req.session.save( () => {
-                //    res.redirect(`/`);
-                //});
+            if (results.length > 0) { //db에서의 반환값이 있으면 로그인 성공
                 res.send("로그인에 성공하였습니다.");
                 console.log("로그인 성공!");
             } else {              

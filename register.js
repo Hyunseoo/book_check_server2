@@ -8,9 +8,7 @@ router.post('/register', (req, res) => {
     var id = req.body.id;
     var pw = req.body.pw;
     var name = req.body.name;
-    console.log(id);
-    console.log(pw);
-    console.log(name);
+    console.log("회원가입 정보 : ", id, pw, name);
     db.query('SELECT * FROM user_info', (err, res) => {
         if (err) {
             console.log(err);
@@ -27,6 +25,7 @@ router.post('/register', (req, res) => {
                 [id, pw, name], (error, data) => {
                     if (error) throw error;
                     res.send("회원가입이 완료되었습니다!");
+                    console.log("회원가입 완료!");
                 });
             } else {                                                  // DB에 같은 아이디가 있는 경우
                 res.send("이미 존재하는 아이디 입니다.");    

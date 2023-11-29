@@ -38,23 +38,6 @@ router.post('/report', (req, res) => {
 //     WHERE user_id = ? AND book_isbn = ? AND book_report IS NULL
 // `;
 
-// db.query('SELECT * FROM book_report WHERE user_id = ? AND book_isbn = ? AND book_report IS NULL', 
-// [id, isbn], (error, results, fields) => {
-//     if (error) {
-//         // 에러 처리
-//         throw error;
-//     }
-//     // 결과 사용
-//     console.log(results); // 쿼리 결과
-//     db.query(
-//         'UPDATE book_report SET book_report = ? WHERE user_id = ? AND book_isbn = ?', 
-//                  [report, id, isbn], (error, data) => {
-//                  if (error) throw error;
-//                  res.send("독후감이 등록되었습니다!");
-//                  console.log("독후감 등록!");
-//         });
-//     })
-
     db.query(
         'SELECT * FROM book_report WHERE user_id = ? AND book_isbn = ?',
         [id, isbn],

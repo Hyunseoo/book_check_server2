@@ -23,7 +23,7 @@ router.post("/post", (req, res) => {
 
   axios.get(apiUrl, {
     params: {
-      TTBKey: 'ttbkey ',
+      TTBKey: 'key',   //ttb 키 입력!!
       ItemId: isbn,
       ItemIdType: 'ISBN13',
       Output: 'JS',
@@ -37,7 +37,7 @@ router.post("/post", (req, res) => {
       //console.log(response.data);
       //console.log(response.data.item[0].subInfo);
       const itemdata = response.data.item[0];
-      const ratingdata = response.data.item[0].subInfo.ratingInfo;
+      //const ratingdata = response.data.item[0].subInfo.ratingInfo;
       console.log(response.data.item[0].subInfo);
 
       const title = itemdata.title; //item 배열의 첫번째 인덱스인 title 속성
@@ -98,7 +98,7 @@ router.post("/book_info", (req, res) => {
       price: global.price,
       summary: global.description,
       cover: global.cover,
-      rating: 5.4 //global.rating
+      rating: 8.4 //global.rating
     };
     res.send(bookInfo);
   }, 3000);  //실행 시간 조절

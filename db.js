@@ -5,7 +5,7 @@ const con = maria.createConnection({
     host: '127.0.0.1',
     port: 3500,
     user: 'root',
-    password: 'pw',
+    password: 'pw',   // 디비 비번 입력!!
     database: 'bookcheck'
 })
 
